@@ -1,4 +1,5 @@
 const Users = require('../config/models/users.models')
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -43,30 +44,42 @@ class authService {
         if (!email || !password) {
             throw new Error('Missing required fields.');
         }
-
+    
         // Check if user exists
         const user = await Users.findOne({ email: email });
         if (!user) {
             throw new Error('User does not exist.');
         }
-
+    
         // Compare password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             throw new Error('Invalid password.');
         }
-
-        // Create JWT token
-        const token = jwt.sign(
+    
+        // Create Access Token
+        const accessToken = jwt.sign(
             { id: user._id, email: user.email },
             process.env.JWT_SECRET,
-            { expiresIn: '2h' } // Token valid for 2 hours
+            { expiresIn: '29m' } // Token valid for 15 minutes
         );
-
+    
+        // Create Refresh Token
+        const refreshToken = jwt.sign(
+            { id: user._id, email: user.email },
+            process.env.JWT_REFRESH_SECRET,
+            { expiresIn: '14d' } // Token valid for 14 days
+        );
+    
+        // Save Refresh Token to the database (or in-memory store)
+        user.refreshToken = refreshToken;
+        await user.save();
+    
         return {
             success: true,
             message: 'Login successful.',
-            token: token,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
             user: {
                 id: user._id,
                 name: user.name,
@@ -75,6 +88,8 @@ class authService {
             },
         };
     }
+    
+    
 }
 
 module.exports = new authService();
