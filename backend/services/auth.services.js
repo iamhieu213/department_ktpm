@@ -88,7 +88,26 @@ class authService {
             },
         };
     }
-    
+
+    async logout(userId) {
+        try {
+            const user = await Users.findById(userId);
+            if (!user) {
+                throw new Error('User not found.');
+            }
+
+            // Xóa refresh token
+            user.refreshToken = null;
+            await user.save();
+
+            return {
+                success: true,
+                message: 'Đăng xuất thành công.',
+            };
+        } catch (error) {
+            throw new Error(`Đăng xuất thất bại: ${error.message}`);
+        }
+    }
     
 }
 
