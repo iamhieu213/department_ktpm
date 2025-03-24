@@ -1,13 +1,16 @@
 const mongoose = require("mongoose");
 
 const ResidentSchema = new mongoose.Schema({
-    id: { type: Number, required: true, unique: true },
     name: { type: String, required: true },
     dob: { type: Date, required: true },
-    gender: { type: Number, default: 0, enum: [0, 1] }, // 0 = Nữ, 1 = Nam
-    cic: { type: Date, default: Date.now }, // Thời gian xác minh
+    gender: { type: Number, default: 0, enum: [0, 1], required: true }, // 0 = Female, 1 = Male
+    cic: { type: Date, default: Date.now },
     address_number: { type: Number, ref: "Apartment" },
-    status: { type: String },
+    status: {
+        type: String,
+        enum: ["Permanent", "Temporary", "Moved Out", "Deceased"],
+        required: true
+    },
     status_date: { type: Date },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }
