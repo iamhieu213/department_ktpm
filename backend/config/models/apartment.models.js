@@ -4,7 +4,7 @@ const ApartmentSchema = new mongoose.Schema({
     area: { type: Number, required: true }, // m²
     status: { type: String, enum: ["Residental", "Business", "Vacal"], required: true },
     owner_id: { type: Number, ref: "Resident" },
-    owner_phone: { type: Number, unique: true },
+    owner_phone: { type: Number},
     number_of_members: { type: Number, default: 0 },
     created_at: { type: Date, default: Date.now },
     updated_at: { type: Date, default: Date.now }

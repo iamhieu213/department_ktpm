@@ -12,10 +12,6 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-    origin: 'http://localhost:3000',  // Địa chỉ frontend
-    credentials: true                
-}));
 
 // Khởi tạo session để sử dụng với Passport
 app.use(session({
