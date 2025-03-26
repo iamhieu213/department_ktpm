@@ -5,7 +5,7 @@ const ResidentServices = require('../services/residents.services');
 class ResidentsControllers {
     async getAllResidents(req, res) {
         try {
-            const list = await ResidentServices.findAllResidents();
+            const list = await ResidentServices.findAllResidents()
             res.status(200).json({
                 success: true,
                 message: 'Residents List',

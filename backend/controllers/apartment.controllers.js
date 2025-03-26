@@ -75,7 +75,6 @@ class ApartmentControllers {
 
     async deleteApartment(req, res) {
         try {
-
             const deleteApartment = await ApartmentServices.deleteApartment(req.params.id);
             res.status(200).json({
                 message: 'Apartment deleted successfully',
@@ -88,6 +87,7 @@ class ApartmentControllers {
             })
         }
     }
+
 }
 
 module.exports = new ApartmentControllers();
